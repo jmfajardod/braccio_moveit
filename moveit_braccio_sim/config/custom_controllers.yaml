@@ -1,0 +1,23 @@
+# Publish all joint states
+# Creates the /joint_states topic necessary in ROS
+joint_state_controller:
+  type: joint_state_controller/JointStateController
+  publish_rate: 50
+controller_list:
+  - name: /braccio_controllers/arm_controller #braccio_arm_controller
+    action_ns: follow_joint_trajectory
+    default: True
+    type: FollowJointTrajectory
+    joints:
+      - base_joint
+      - shoulder_joint
+      - elbow_joint
+      - wrist_pitch_joint
+      - wrist_roll_joint
+  - name: /braccio_controllers/gripper_controller #hand_controller
+    action_ns: follow_joint_trajectory
+    default: True
+    type: FollowJointTrajectory
+    joints:
+      - gripper_joint
+      - sub_gripper_joint

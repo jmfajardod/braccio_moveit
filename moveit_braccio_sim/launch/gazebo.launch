@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<launch>
+  <arg name="paused" default="false"/>
+  <arg name="gazebo_gui" default="true"/>
+  <arg name="urdf_path" default="$(find braccio_manipulator)/urdf/braccio_arm.urdf.xacro"/>
+
+  <!-- startup simulated world -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" default="worlds/empty.world"/>
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="gui" value="$(arg gazebo_gui)"/>
+  </include>
+
+  <!-- send robot urdf to param server -->
+  <arg name="robot_xacro" value="$(find braccio_manipulator)/urdf/braccio_arm.urdf.xacro
+                                    load_gazebo:=true"/>
+
+    <param name="robot_description"  command="$(find xacro)/xacro $(arg robot_xacro)" />
+
+  <!-- push robot_description to factory and spawn robot in gazebo at the origin, change x,y,z arguments to spawn in a different position -->
+  
+  <!-- Robot initial pose -->
+  <arg name="x" default="0.0"/>
+  <arg name="y" default="0.0"/>
+  <arg name="z" default="0.01"/>
+  <arg name="roll" default="0.0"/>
+  <arg name="pitch" default="0.0"/>
+  <arg name="yaw" default="$(eval 0.0 * 3.141592 / 180.0)"/>
+  <node 
+        pkg="gazebo_ros" 
+        type="spawn_model" 
+        name="spawn_braccio"  
+        respawn="false"
+        args="-x $(arg x) -y $(arg y) -z $(arg z)
+            -R $(arg roll) -P $(arg pitch) -Y $(arg yaw)
+            -urdf 
+            -param robot_description
+            -model robot"
+    />
+
+  <include file="$(find moveit_braccio_sim)/launch/ros_controllers.launch"/>
+
+</launch>

@@ -1,0 +1,11 @@
+moveit_setup_assistant_config:
+  URDF:
+    package: braccio_manipulator
+    relative_path: urdf/braccio_arm.urdf.xacro
+    xacro_args: load_gazebo:=true
+  SRDF:
+    relative_path: config/braccio_manipulator.srdf
+  CONFIG:
+    author_name: Jose Fajardo
+    author_email: jmfajardod@gmail.com
+    generated_timestamp: 1610308869
